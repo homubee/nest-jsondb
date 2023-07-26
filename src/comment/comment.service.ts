@@ -65,14 +65,12 @@ export class CommentService {
   }
 
   async deleteComment(id: number) {
-    const comments: Comment[] = await this.jsonDBService.getTable("comment");
-    const target: Comment = await this.jsonDBService.findById(comments, id);
-    if (target.depth === 1) {
-      let childComments: Comment[] = await this.jsonDBService.findRelatedObjects(comments, "parent_comment_id", id);
-      for (var elem of childComments) {
-        await this.jsonDBService.deleteItem("comment", comments, elem.id);
-      }
+    let changedComments: Comment[] = await this.jsonDBService.getTable("comment");
+    let childComments: Comment[] = await this.jsonDBService.findRelatedObjects(changedComments, "parent_comment_id", id);
+    for (let elem of childComments) {
+      await this.deleteComment(elem.id);
+      changedComments = await this.jsonDBService.getTable("comment");
     }
-    await this.jsonDBService.deleteItem("comment", comments, id);
+    await this.jsonDBService.deleteItem("comment", changedComments, id);
   }
 }
