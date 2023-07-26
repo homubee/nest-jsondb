@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs/promises';
 import { Page, Pageable } from './page';
-import { SortType } from './sort';
+import { OrderType } from './order';
 
 interface dbBaseField {
   id: number;
@@ -77,15 +77,15 @@ export class JsonDBService {
     return ret;
   }
 
-  async sortItem<T extends dbBaseField>(table: T[], fieldName: string, sortType: SortType): Promise<T[]> {
+  async sortItem<T extends dbBaseField>(table: T[], fieldName: string, orderby: OrderType): Promise<T[]> {
     let ret: T[] = table;
-    switch (sortType) {
-      case SortType.ASC:
+    switch (orderby) {
+      case OrderType.ASC:
         ret.sort((a, b) => {
           return a[fieldName] < b[fieldName] ? -1 : a[fieldName] > b[fieldName] ? 1 : 0;
         });
         break;
-      case SortType.DESC:
+      case OrderType.DESC:
         ret.sort((a, b) => {
           return a[fieldName] > b[fieldName] ? -1 : a[fieldName] < b[fieldName] ? 1 : 0;
         });

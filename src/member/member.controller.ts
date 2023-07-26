@@ -4,7 +4,7 @@ import { ApiExtraModels, ApiOperation, ApiQuery, ApiTags, getSchemaPath } from '
 import { MemberRequestQueryDTO, MemberRegisterRequestDTO } from './dto/request/member.request.dto';
 import { MemberSearch } from './member.entity';
 import { Pageable } from 'src/util/page';
-import { SortType } from 'src/util/sort';
+import { OrderType } from 'src/util/order';
 
 @Controller("api/v1/members")
 @ApiTags("회원 API")
@@ -39,10 +39,10 @@ export class MemberController {
     }
   })
   @ApiQuery({
-    name: "sort",
+    name: "orderby",
     required: false,
-    description: "sort",
-    enum: SortType
+    description: "orderby",
+    enum: OrderType
   })
   getMembers(@Query() queryDTO: MemberRequestQueryDTO) {
     return this.memberService.getMembers(queryDTO);

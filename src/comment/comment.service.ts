@@ -4,7 +4,7 @@ import { Comment } from './comment.entity';
 import { CommentCreateRequestDTO, CommentUpdateRequestDTO } from './dto/request/comment.request.dto';
 import { Member } from 'src/member/member.entity';
 import { Post } from 'src/post/post.entity';
-import { SortType } from 'src/util/sort';
+import { OrderType } from 'src/util/order';
 
 @Injectable()
 export class CommentService {
@@ -34,10 +34,10 @@ export class CommentService {
         elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
         elem.post = await this.jsonDBService.findRelatedObject(posts, "id", elem.post_id);
         elem.child_comments = await this.findChildComments(elem.id);
-        elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", SortType.DESC);
+        elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", OrderType.DESC);
       }
     }
-    result = await this.jsonDBService.sortItem(result, "createdAt", SortType.DESC);
+    result = await this.jsonDBService.sortItem(result, "createdAt", OrderType.DESC);
     return result;
   }
 
@@ -49,7 +49,7 @@ export class CommentService {
     for (var elem of result) {
       elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
       elem.child_comments = await this.findChildComments(elem.id);
-      elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", SortType.DESC);
+      elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", OrderType.DESC);
     }
     return result;
   }

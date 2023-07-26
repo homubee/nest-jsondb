@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger"
 import { MemberSearch } from "src/member/member.entity"
 import { Pageable } from "src/util/page"
-import { SortType } from "src/util/sort"
+import { OrderType } from "src/util/order"
 
 export class MemberRegisterRequestDTO {
   @ApiProperty()
@@ -16,7 +16,7 @@ export class MemberRequestQueryDTO {
   search?: MemberSearch
 
   @ApiProperty()
-  sort?: SortType
+  orderby?: OrderType
 
   @ApiProperty()
   pageable: Pageable

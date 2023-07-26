@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JsonDBService } from 'src/util/jsondb.service';
 import { Board } from './board.entity';
 import { BoardRequestDTO } from './dto/request/board.request.dto';
-import { SortType } from 'src/util/sort';
+import { OrderType } from 'src/util/order';
 import { PostService } from 'src/post/post.service';
 import { Post } from 'src/post/post.entity';
 
@@ -25,7 +25,7 @@ export class BoardService {
   async getBoards(): Promise<Board[]> {
     const boards: Board[] = await this.jsonDBService.getTable("board");
     let result: Board[] = boards;
-    result = await this.jsonDBService.sortItem(result, "createdAt", SortType.DESC);
+    result = await this.jsonDBService.sortItem(result, "createdAt", OrderType.DESC);
     return result;
   }
 

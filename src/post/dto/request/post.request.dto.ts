@@ -1,7 +1,7 @@
 import { ApiProperty, PartialType, OmitType } from "@nestjs/swagger";
 import { PostSearch } from "src/post/post.entity";
 import { Pageable } from "src/util/page";
-import { SortType } from "src/util/sort";
+import { OrderType } from "src/util/order";
 
 export class PostCreateRequestDTO {
   @ApiProperty()
@@ -24,7 +24,7 @@ export class PostRequestQueryDTO {
   search?: PostSearch
 
   @ApiProperty()
-  sort?: SortType
+  orderby?: OrderType
 
   @ApiProperty()
   pageable: Pageable

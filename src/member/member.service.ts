@@ -30,7 +30,7 @@ export class MemberService {
         result = await this.jsonDBService.findByStringField(result, key, requestDTO.search[key]);
       }
     }
-    result = await this.jsonDBService.sortItem(result, "createdAt", requestDTO.sort);
+    result = await this.jsonDBService.sortItem(result, "createdAt", requestDTO.orderby);
     return await this.jsonDBService.findWithPage(result, requestDTO.pageable);
   }
 

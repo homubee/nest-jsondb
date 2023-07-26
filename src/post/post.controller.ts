@@ -4,7 +4,7 @@ import { ApiExtraModels, ApiOperation, ApiQuery, ApiTags, getSchemaPath } from '
 import { PostCreateRequestDTO, PostRequestQueryDTO, PostUpdateRequestDTO } from './dto/request/post.request.dto';
 import { PostSearch } from './post.entity';
 import { Pageable } from 'src/util/page';
-import { SortType } from 'src/util/sort';
+import { OrderType } from 'src/util/order';
 
 @Controller("api/v1/posts")
 @ApiTags("게시글 API")
@@ -39,10 +39,10 @@ export class PostController {
     }
   })
   @ApiQuery({
-    name: "sort",
+    name: "orderby",
     required: false,
-    description: "sort",
-    enum: SortType
+    description: "orderby",
+    enum: OrderType
   })
   getPosts(@Query() requestDTO: PostRequestQueryDTO) {
     return this.postService.getPosts(requestDTO);
