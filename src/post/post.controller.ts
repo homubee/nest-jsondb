@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { PostService } from './post.service';
 import { ApiExtraModels, ApiOperation, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PostCreateRequestDTO, PostUpdateRequestDTO } from './dto/request/post.request.dto';
@@ -13,8 +13,8 @@ export class PostController {
 
   @Get("/:id")
   @ApiOperation({ summary: "게시글 단건 조회 API", description: "게시글 단건을 조회한다." })
-  getPost(@Param("id") id: string) {
-    return this.postService.getPost(parseInt(id));
+  getPost(@Param("id", ParseIntPipe) id: number) {
+    return this.postService.getPost(id);
   }
 
   @Get()
@@ -41,15 +41,11 @@ export class PostController {
     description: "sort",
     enum: SortType
   })
-  getPosts(@Query() query) {
+  getPosts(@Query("title") title: string, @Query("sort") sort: SortType, @Query("pageable") pageable: Pageable) {
     const postSearch: PostSearch = {
-      title: query.title
+      title: title
     }
-    const pageable: Pageable = {
-      page: parseInt(query.pageable.page),
-      size: parseInt(query.pageable.size)
-    }
-    return this.postService.getPosts(postSearch, pageable, query.sort);
+    return this.postService.getPosts(postSearch, pageable, sort);
   }
 
   @Post()
@@ -60,13 +56,13 @@ export class PostController {
 
   @Put("/:id")
   @ApiOperation({ summary: "게시글 정보 수정 API", description: "게시글 정보를 수정한다." })
-  updatePost(@Param("id") id: string, @Body() requestDTO: PostUpdateRequestDTO) {
-    return this.postService.updatePost(parseInt(id), requestDTO);
+  updatePost(@Param("id", ParseIntPipe) id: number, @Body() requestDTO: PostUpdateRequestDTO) {
+    return this.postService.updatePost(id, requestDTO);
   }
 
   @Delete("/:id")
   @ApiOperation({ summary: "게시글 삭제 API", description: "게시글을 삭제한다. (연관된 데이터 모두 삭제)" })
-  deletePost(@Param("id") id: string) {
-    return this.postService.deletePost(parseInt(id));
+  deletePost(@Param("id", ParseIntPipe) id: number) {
+    return this.postService.deletePost(id);
   }
 }

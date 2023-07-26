@@ -33,14 +33,24 @@ export class CommentService {
       for (var elem of result) {
         elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
         elem.post = await this.jsonDBService.findRelatedObject(posts, "id", elem.post_id);
-        elem.comments = await this.jsonDBService.findRelatedObjects(comments, "comment_id", elem.id);
-        for (var subElem of elem.comments) {
-          subElem.member = await this.jsonDBService.findRelatedObject(members, "id", subElem.member_id);
-        }
+        elem.comments = await this.findChildComments(elem.id);
         elem.comments = await this.jsonDBService.sortItem(elem.comments, "createdAt", SortType.DESC);
       }
     }
     result = await this.jsonDBService.sortItem(result, "createdAt", SortType.DESC);
+    return result;
+  }
+
+  async findChildComments(id: number): Promise<Comment[]> {
+    const comments: Comment[] = await this.jsonDBService.getTable("comment");
+    const members: Member[] = await this.jsonDBService.getTable("member");
+
+    let result: Comment[] = await this.jsonDBService.findRelatedObjects(comments, "comment_id", id);
+    for (var elem of result) {
+      elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
+      elem.comments = await this.findChildComments(elem.id);
+      elem.comments = await this.jsonDBService.sortItem(elem.comments, "createdAt", SortType.DESC);
+    }
     return result;
   }
 

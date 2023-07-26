@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BoardRequestDTO } from './dto/request/board.request.dto';
@@ -10,8 +10,8 @@ export class BoardController {
 
   @Get("/:id")
   @ApiOperation({ summary: "게시판 단건 조회 API", description: "게시판 단건을 조회한다." })
-  getBoard(@Param("id") id: string) {
-    return this.boardService.getBoard(parseInt(id));
+  getBoard(@Param("id", ParseIntPipe) id: number) {
+    return this.boardService.getBoard(id);
   }
 
   @Get()
@@ -22,19 +22,19 @@ export class BoardController {
 
   @Post()
   @ApiOperation({ summary: "게시판 생성 API", description: "게시판을 생성한다." })
-  createMember(@Body() requestDTO: BoardRequestDTO) {
+  createBoard(@Body() requestDTO: BoardRequestDTO) {
     return this.boardService.createBoard(requestDTO);
   }
 
   @Put("/:id")
   @ApiOperation({ summary: "게시판 정보 수정 API", description: "게시판 정보를 수정한다." })
-  updateMember(@Param("id") id: string, @Body() requestDTO: BoardRequestDTO) {
-    return this.boardService.updateBoard(parseInt(id), requestDTO);
+  updateBoard(@Param("id", ParseIntPipe) id: number, @Body() requestDTO: BoardRequestDTO) {
+    return this.boardService.updateBoard(id, requestDTO);
   }
 
   @Delete("/:id")
   @ApiOperation({ summary: "게시판 삭제 API", description: "게시판을 삭제한다. (연관된 데이터 모두 삭제)" })
-  deleteMember(@Param("id") id: string) {
-    return this.boardService.deleteBoard(parseInt(id));
+  deleteBoard(@Param("id", ParseIntPipe) id: number) {
+    return this.boardService.deleteBoard(id);
   }
 }

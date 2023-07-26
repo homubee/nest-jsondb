@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
 import { CommentCreateRequestDTO, CommentUpdateRequestDTO } from './dto/request/comment.request.dto';
@@ -10,19 +10,19 @@ export class CommentController {
 
   @Get("/:id")
   @ApiOperation({ summary: "댓글 단건 조회 API", description: "댓글 단건을 조회한다." })
-  getComment(@Param("id") id: string) {
-    return this.commentService.getComment(parseInt(id));
+  getComment(@Param("id", ParseIntPipe) id: number) {
+    return this.commentService.getComment(id);
   }
 
   @Get()
-  @ApiOperation({ summary: "댓글 복수건 조회 API", description: "댓글 복수건을 조회한다. (depth=1 지정 시 대댓글까지 한번에 조회)" })
+  @ApiOperation({ summary: "댓글 복수건 조회 API", description: "댓글 복수건을 조회한다. (depth 지정 시 대댓글까지 한번에 조회, 미지정 시 전체 조회)" })
   @ApiQuery({
     name: "depth",
     required: false,
     description: "depth"
   })
-  getComments(@Query() query) {
-    return this.commentService.getComments(parseInt(query.depth));
+  getComments(@Query("depth", ParseIntPipe) depth: number) {
+    return this.commentService.getComments(depth);
   }
 
   @Post()
@@ -33,13 +33,13 @@ export class CommentController {
 
   @Put("/:id")
   @ApiOperation({ summary: "댓글 정보 수정 API", description: "댓글 정보를 수정한다." })
-  updateComment(@Param("id") id: string, @Body() requestDTO: CommentUpdateRequestDTO) {
-    return this.commentService.updateComment(parseInt(id), requestDTO);
+  updateComment(@Param("id", ParseIntPipe) id: number, @Body() requestDTO: CommentUpdateRequestDTO) {
+    return this.commentService.updateComment(id, requestDTO);
   }
 
   @Delete("/:id")
   @ApiOperation({ summary: "댓글 삭제 API", description: "댓글을 삭제한다. (연관된 데이터 모두 삭제)" })
-  deleteComment(@Param("id") id: string) {
-    return this.commentService.deleteComment(parseInt(id));
+  deleteComment(@Param("id", ParseIntPipe) id: number) {
+    return this.commentService.deleteComment(id);
   }
 }
