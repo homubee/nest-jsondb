@@ -6,12 +6,12 @@ import { PostSearch } from './post.entity';
 import { Pageable } from 'src/util/page';
 import { SortType } from 'src/util/sort';
 
-@Controller("/api/v1/posts")
+@Controller("api/v1/posts")
 @ApiTags("게시글 API")
 export class PostController {
   constructor(private postService: PostService) {}
 
-  @Get("/:id")
+  @Get(":id")
   @ApiOperation({ summary: "게시글 단건 조회 API", description: "게시글 단건을 조회한다." })
   getPost(@Param("id") id: number) {
     return this.postService.getPost(id);
@@ -54,13 +54,13 @@ export class PostController {
     return this.postService.createPost(requestDTO);
   }
 
-  @Put("/:id")
+  @Put(":id")
   @ApiOperation({ summary: "게시글 정보 수정 API", description: "게시글 정보를 수정한다." })
   updatePost(@Param("id") id: number, @Body() requestDTO: PostUpdateRequestDTO) {
     return this.postService.updatePost(id, requestDTO);
   }
 
-  @Delete("/:id")
+  @Delete(":id")
   @ApiOperation({ summary: "게시글 삭제 API", description: "게시글을 삭제한다. (연관된 데이터 모두 삭제)" })
   deletePost(@Param("id") id: number) {
     return this.postService.deletePost(id);

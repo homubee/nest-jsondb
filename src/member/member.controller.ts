@@ -6,12 +6,12 @@ import { MemberSearch } from './member.entity';
 import { Pageable } from 'src/util/page';
 import { SortType } from 'src/util/sort';
 
-@Controller("/api/v1/members")
+@Controller("api/v1/members")
 @ApiTags("회원 API")
 export class MemberController {
   constructor(private memberService: MemberService) {}
 
-  @Get("/:id")
+  @Get(":id")
   @ApiOperation({ summary: "회원 단건 조회 API", description: "회원 단건을 조회한다." })
   getMember(@Param("id") id: number) {
     return this.memberService.getMember(id);
@@ -54,13 +54,13 @@ export class MemberController {
     return this.memberService.createMember(requestDTO);
   }
 
-  @Put("/:id")
+  @Put(":id")
   @ApiOperation({ summary: "회원 정보 수정 API", description: "회원 정보를 수정한다." })
   updateMember(@Param("id") id: number, @Body() requestDTO: MemberRegisterRequestDTO) {
     return this.memberService.updateMember(id, requestDTO);
   }
 
-  @Delete("/:id")
+  @Delete(":id")
   @ApiOperation({ summary: "회원 삭제 API", description: "회원을 삭제한다. (연관된 데이터 모두 삭제)" })
   deleteMember(@Param("id") id: number) {
     return this.memberService.deleteMember(id);
