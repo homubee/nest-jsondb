@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { PostService } from './post.service';
 import { ApiExtraModels, ApiOperation, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
 import { PostCreateRequestDTO, PostUpdateRequestDTO } from './dto/request/post.request.dto';
@@ -13,7 +13,7 @@ export class PostController {
 
   @Get("/:id")
   @ApiOperation({ summary: "게시글 단건 조회 API", description: "게시글 단건을 조회한다." })
-  getPost(@Param("id", ParseIntPipe) id: number) {
+  getPost(@Param("id") id: number) {
     return this.postService.getPost(id);
   }
 
@@ -56,13 +56,13 @@ export class PostController {
 
   @Put("/:id")
   @ApiOperation({ summary: "게시글 정보 수정 API", description: "게시글 정보를 수정한다." })
-  updatePost(@Param("id", ParseIntPipe) id: number, @Body() requestDTO: PostUpdateRequestDTO) {
+  updatePost(@Param("id") id: number, @Body() requestDTO: PostUpdateRequestDTO) {
     return this.postService.updatePost(id, requestDTO);
   }
 
   @Delete("/:id")
   @ApiOperation({ summary: "게시글 삭제 API", description: "게시글을 삭제한다. (연관된 데이터 모두 삭제)" })
-  deletePost(@Param("id", ParseIntPipe) id: number) {
+  deletePost(@Param("id") id: number) {
     return this.postService.deletePost(id);
   }
 }
