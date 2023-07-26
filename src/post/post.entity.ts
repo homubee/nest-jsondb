@@ -12,8 +12,9 @@ export class Post {
   comments?: Comment[]
   @ApiProperty()
   title: String
+  @ApiProperty()
   content: String
   createdAt: Date
 }
 
-export class PostSearch extends PartialType(OmitType(Post, ["id", "member_id", "member", "board_id", "board", "content", "comments"])) {}
+export class PostSearch extends PartialType(OmitType(Post, ["id", "member_id", "member", "board_id", "board", "comments"])) {}
