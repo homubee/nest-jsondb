@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { MemberService } from './member.service';
 import { ApiExtraModels, ApiOperation, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
-import { MemberRegisterRequestDTO } from './dto/request/member.request.dto';
+import { MemberRequestQueryDTO, MemberRegisterRequestDTO } from './dto/request/member.request.dto';
 import { MemberSearch } from './member.entity';
 import { Pageable } from 'src/util/page';
 import { SortType } from 'src/util/sort';
@@ -19,10 +19,24 @@ export class MemberController {
 
   @Get()
   @ApiOperation({ summary: "회원 복수건 조회 API (페이지네이션)", description: "회원 복수건을 조회한다.\n\n page는 1부터 시작" })
+  @ApiExtraModels(MemberSearch, Pageable)
   @ApiQuery({
-    name: "email",
-    required: false,
-    description: "email"
+    name: "search",
+    required: true,
+    style: "deepObject",
+    type: "object",
+    schema: {
+      $ref: getSchemaPath(MemberSearch)
+    }
+  })
+  @ApiQuery({
+    name: "pageable",
+    required: true,
+    style: "deepObject",
+    type: "object",
+    schema: {
+      $ref: getSchemaPath(Pageable)
+    }
   })
   @ApiQuery({
     name: "sort",
@@ -30,22 +44,8 @@ export class MemberController {
     description: "sort",
     enum: SortType
   })
-  @ApiExtraModels(Pageable)
-  @ApiQuery({
-    name: "pageable",
-    required: true,
-    style: "deepObject",
-    explode: true,
-    type: "object",
-    schema: {
-      $ref: getSchemaPath(Pageable)
-    }
-  })
-  getMembers(@Query("email") email: string, @Query("sort") sort: SortType, @Query("pageable") pageable: Pageable) {
-    const memberSearch: MemberSearch = {
-      email: email
-    }
-    return this.memberService.getMembers(memberSearch, pageable, sort);
+  getMembers(@Query() queryDTO: MemberRequestQueryDTO) {
+    return this.memberService.getMembers(queryDTO);
   }
 
   @Post()

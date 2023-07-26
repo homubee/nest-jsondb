@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Member, MemberSearch } from './member.entity';
+import { Member } from './member.entity';
 import { JsonDBService } from 'src/util/jsondb.service';
-import { MemberRegisterRequestDTO } from './dto/request/member.request.dto';
-import { Page, Pageable } from 'src/util/page';
-import { SortType } from 'src/util/sort';
+import { MemberRequestQueryDTO, MemberRegisterRequestDTO } from './dto/request/member.request.dto';
+import { Page } from 'src/util/page';
 import { PostService } from 'src/post/post.service';
 import { Post } from 'src/post/post.entity';
 
@@ -23,14 +22,14 @@ export class MemberService {
     return result;
   }
 
-  async getMembers(memberSearch: MemberSearch, pageable: Pageable, sort: SortType): Promise<Page<Member>> {
+  async getMembers(requestDTO: MemberRequestQueryDTO): Promise<Page<Member>> {
     const members: Member[] = await this.jsonDBService.getTable("member");
     let result: Member[] = members;
-    if (memberSearch.email) {
-      result = await this.jsonDBService.findByStringField(result, "email", memberSearch.email);
+    if (requestDTO.search.email) {
+      result = await this.jsonDBService.findByStringField(result, "email", requestDTO.search.email);
     }
-    result = await this.jsonDBService.sortItem(result, "createdAt", sort);
-    return await this.jsonDBService.findWithPage(result, pageable);
+    result = await this.jsonDBService.sortItem(result, "createdAt", requestDTO.sort);
+    return await this.jsonDBService.findWithPage(result, requestDTO.pageable);
   }
 
   async createMember(requestDTO: MemberRegisterRequestDTO) {

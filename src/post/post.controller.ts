@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { PostService } from './post.service';
 import { ApiExtraModels, ApiOperation, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
-import { PostCreateRequestDTO, PostUpdateRequestDTO } from './dto/request/post.request.dto';
+import { PostCreateRequestDTO, PostRequestQueryDTO, PostUpdateRequestDTO } from './dto/request/post.request.dto';
 import { PostSearch } from './post.entity';
 import { Pageable } from 'src/util/page';
 import { SortType } from 'src/util/sort';
@@ -19,17 +19,20 @@ export class PostController {
 
   @Get()
   @ApiOperation({ summary: "게시글 복수건 조회 API (페이지네이션)", description: "게시글 복수건을 조회한다.\n\n page는 1부터 시작" })
+  @ApiExtraModels(PostSearch, Pageable)
   @ApiQuery({
-    name: "title",
-    required: false,
-    description: "title"
+    name: "search",
+    required: true,
+    style: "deepObject",
+    type: "object",
+    schema: {
+      $ref: getSchemaPath(PostSearch)
+    }
   })
-  @ApiExtraModels(Pageable)
   @ApiQuery({
     name: "pageable",
     required: true,
     style: "deepObject",
-    explode: true,
     type: "object",
     schema: {
       $ref: getSchemaPath(Pageable)
@@ -41,11 +44,8 @@ export class PostController {
     description: "sort",
     enum: SortType
   })
-  getPosts(@Query("title") title: string, @Query("sort") sort: SortType, @Query("pageable") pageable: Pageable) {
-    const postSearch: PostSearch = {
-      title: title
-    }
-    return this.postService.getPosts(postSearch, pageable, sort);
+  getPosts(@Query() requestDTO: PostRequestQueryDTO) {
+    return this.postService.getPosts(requestDTO);
   }
 
   @Post()

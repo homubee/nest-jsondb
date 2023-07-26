@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { JsonDBService } from 'src/util/jsondb.service';
-import { Post, PostSearch } from './post.entity';
-import { PostCreateRequestDTO, PostUpdateRequestDTO } from './dto/request/post.request.dto';
-import { Page, Pageable } from 'src/util/page';
+import { Post } from './post.entity';
+import { PostCreateRequestDTO, PostRequestQueryDTO, PostUpdateRequestDTO } from './dto/request/post.request.dto';
+import { Page } from 'src/util/page';
 import { Comment } from 'src/comment/comment.entity';
 import { Member } from 'src/member/member.entity';
 import { Board } from 'src/board/board.entity';
-import { SortType } from 'src/util/sort';
 import { CommentService } from 'src/comment/comment.service';
 
 @Injectable()
@@ -29,14 +28,14 @@ export class PostService {
     return result;
   }
 
-  async getPosts(postSearch: PostSearch, pageable: Pageable, sort: SortType): Promise<Page<Post>> {
+  async getPosts(requestDTO: PostRequestQueryDTO): Promise<Page<Post>> {
     const posts: Post[] = await this.jsonDBService.getTable("post");
     let result: Post[] = posts;
-    if (postSearch.title) {
-      result = await this.jsonDBService.findByStringField(result, "title", postSearch.title);
+    if (requestDTO.search.title) {
+      result = await this.jsonDBService.findByStringField(result, "title", requestDTO.search.title);
     }
-    result = await this.jsonDBService.sortItem(result, "createdAt", sort);
-    return await this.jsonDBService.findWithPage(result, pageable);
+    result = await this.jsonDBService.sortItem(result, "createdAt", requestDTO.sort);
+    return await this.jsonDBService.findWithPage(result, requestDTO.pageable);
   }
 
   async createPost(requestDTO: PostCreateRequestDTO) {

@@ -1,4 +1,7 @@
 import { ApiProperty, PartialType, OmitType } from "@nestjs/swagger";
+import { PostSearch } from "src/post/post.entity";
+import { Pageable } from "src/util/page";
+import { SortType } from "src/util/sort";
 
 export class PostCreateRequestDTO {
   @ApiProperty()
@@ -15,3 +18,14 @@ export class PostCreateRequestDTO {
 }
 
 export class PostUpdateRequestDTO extends PartialType(OmitType(PostCreateRequestDTO, ['board_id', 'member_id'])) {}
+
+export class PostRequestQueryDTO {
+  @ApiProperty()
+  search?: PostSearch
+
+  @ApiProperty()
+  sort?: SortType
+
+  @ApiProperty()
+  pageable: Pageable
+}
