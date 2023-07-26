@@ -18,7 +18,7 @@ export class CommentService {
     let result: Comment = await this.jsonDBService.findById(comments, id);
     result.member = await this.jsonDBService.findRelatedObject(members, "id", result.member_id);
     result.post = await this.jsonDBService.findRelatedObject(posts, "id", result.post_id);
-    result.comments = await this.jsonDBService.findRelatedObjects(comments, "comment_id", result.id);
+    result.child_comments = await this.jsonDBService.findRelatedObjects(comments, "parent_comment_id", result.id);
     return result;
   }
 
@@ -33,8 +33,8 @@ export class CommentService {
       for (var elem of result) {
         elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
         elem.post = await this.jsonDBService.findRelatedObject(posts, "id", elem.post_id);
-        elem.comments = await this.findChildComments(elem.id);
-        elem.comments = await this.jsonDBService.sortItem(elem.comments, "createdAt", SortType.DESC);
+        elem.child_comments = await this.findChildComments(elem.id);
+        elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", SortType.DESC);
       }
     }
     result = await this.jsonDBService.sortItem(result, "createdAt", SortType.DESC);
@@ -45,11 +45,11 @@ export class CommentService {
     const comments: Comment[] = await this.jsonDBService.getTable("comment");
     const members: Member[] = await this.jsonDBService.getTable("member");
 
-    let result: Comment[] = await this.jsonDBService.findRelatedObjects(comments, "comment_id", id);
+    let result: Comment[] = await this.jsonDBService.findRelatedObjects(comments, "parent_comment_id", id);
     for (var elem of result) {
       elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
-      elem.comments = await this.findChildComments(elem.id);
-      elem.comments = await this.jsonDBService.sortItem(elem.comments, "createdAt", SortType.DESC);
+      elem.child_comments = await this.findChildComments(elem.id);
+      elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", SortType.DESC);
     }
     return result;
   }
@@ -68,7 +68,7 @@ export class CommentService {
     const comments: Comment[] = await this.jsonDBService.getTable("comment");
     const target: Comment = await this.jsonDBService.findById(comments, id);
     if (target.depth === 1) {
-      let childComments: Comment[] = await this.jsonDBService.findRelatedObjects(comments, "comment_id", id);
+      let childComments: Comment[] = await this.jsonDBService.findRelatedObjects(comments, "parent_comment_id", id);
       for (var elem of childComments) {
         await this.jsonDBService.deleteItem("comment", comments, elem.id);
       }

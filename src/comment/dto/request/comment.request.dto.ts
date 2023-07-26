@@ -8,7 +8,7 @@ export class CommentCreateRequestDTO {
   post_id: number
 
   @ApiProperty()
-  comment_id: number
+  parent_comment_id: number
 
   @ApiProperty()
   depth: number
@@ -17,4 +17,4 @@ export class CommentCreateRequestDTO {
   content: String
 }
 
-export class CommentUpdateRequestDTO extends PartialType(OmitType(CommentCreateRequestDTO, ["member_id", "post_id", "comment_id", "depth"])) {}
+export class CommentUpdateRequestDTO extends PartialType(OmitType(CommentCreateRequestDTO, ["member_id", "post_id", "parent_comment_id", "depth"])) {}

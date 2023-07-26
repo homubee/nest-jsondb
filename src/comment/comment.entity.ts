@@ -7,8 +7,8 @@ export class Comment {
   member?: Member
   post_id: number
   post?: Post
-  comment_id?: number
-  comments?: Comment[]
+  parent_comment_id?: number
+  child_comments?: Comment[]
   depth: number
   content: String
   createdAt: Date
