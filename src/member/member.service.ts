@@ -25,8 +25,10 @@ export class MemberService {
   async getMembers(requestDTO: MemberRequestQueryDTO): Promise<Page<Member>> {
     const members: Member[] = await this.jsonDBService.getTable("member");
     let result: Member[] = members;
-    if (requestDTO.search.email) {
-      result = await this.jsonDBService.findByStringField(result, "email", requestDTO.search.email);
+    for (let key in requestDTO.search) {
+      if (requestDTO.search[key]) {
+        result = await this.jsonDBService.findByStringField(result, key, requestDTO.search[key]);
+      }
     }
     result = await this.jsonDBService.sortItem(result, "createdAt", requestDTO.sort);
     return await this.jsonDBService.findWithPage(result, requestDTO.pageable);

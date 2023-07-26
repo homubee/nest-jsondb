@@ -31,8 +31,10 @@ export class PostService {
   async getPosts(requestDTO: PostRequestQueryDTO): Promise<Page<Post>> {
     const posts: Post[] = await this.jsonDBService.getTable("post");
     let result: Post[] = posts;
-    if (requestDTO.search.title) {
-      result = await this.jsonDBService.findByStringField(result, "title", requestDTO.search.title);
+    for (let key in requestDTO.search) {
+      if (requestDTO.search[key]) {
+        result = await this.jsonDBService.findByStringField(result, key, requestDTO.search[key]);
+      }
     }
     result = await this.jsonDBService.sortItem(result, "createdAt", requestDTO.sort);
     return await this.jsonDBService.findWithPage(result, requestDTO.pageable);
