@@ -9,7 +9,6 @@ export class Comment {
   post?: Post
   parent_comment_id?: number
   child_comments?: Comment[]
-  depth: number
   content: String
   createdAt: Date
 }

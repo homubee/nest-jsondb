@@ -22,20 +22,17 @@ export class CommentService {
     return result;
   }
 
-  async getComments(depth: number): Promise<Comment[]> {
+  async getComments(): Promise<Comment[]> {
     const comments: Comment[] = await this.jsonDBService.getTable("comment");
     const members: Member[] = await this.jsonDBService.getTable("member");
     const posts: Post[] = await this.jsonDBService.getTable("post");
 
     let result: Comment[] = comments;
-    if (depth) {
-      result = await this.jsonDBService.findByField(comments, "depth", depth);
-      for (var elem of result) {
-        elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
-        elem.post = await this.jsonDBService.findRelatedObject(posts, "id", elem.post_id);
-        elem.child_comments = await this.findChildComments(elem.id);
-        elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", OrderType.DESC);
-      }
+    for (var elem of result) {
+      elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
+      elem.post = await this.jsonDBService.findRelatedObject(posts, "id", elem.post_id);
+      elem.child_comments = await this.findChildComments(elem.id);
+      elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", OrderType.DESC);
     }
     result = await this.jsonDBService.sortItem(result, "createdAt", OrderType.DESC);
     return result;
@@ -56,6 +53,10 @@ export class CommentService {
 
   async createComment(requestDTO: CommentCreateRequestDTO) {
     const comments: Comment[] = await this.jsonDBService.getTable("comment");
+    // 부모 댓글이 없는 경우에는 parent_comment_id를 0으로 지정
+    if (!requestDTO.parent_comment_id) {
+      requestDTO.parent_comment_id = 0
+    }
     this.jsonDBService.createItem("comment", comments, requestDTO);
   }
 

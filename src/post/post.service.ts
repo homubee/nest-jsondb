@@ -57,7 +57,7 @@ export class PostService {
     let result: Post = await this.jsonDBService.findById(posts, id);
     result.comments = await this.jsonDBService.findRelatedObjects(comments, "post_id", result.id);
     for (var elem of result.comments) {
-      if (elem.depth === 1) {
+      if (elem.parent_comment_id === 0) {
         await this.commentService.deleteComment(elem.id);
       }
     }

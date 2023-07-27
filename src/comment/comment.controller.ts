@@ -15,14 +15,9 @@ export class CommentController {
   }
 
   @Get()
-  @ApiOperation({ summary: "댓글 복수건 조회 API", description: "댓글 복수건을 조회한다. (depth 지정 시 대댓글까지 한번에 조회, 미지정 시 전체 조회)" })
-  @ApiQuery({
-    name: "depth",
-    required: false,
-    description: "depth"
-  })
-  getComments(@Query("depth") depth: number) {
-    return this.commentService.getComments(depth);
+  @ApiOperation({ summary: "댓글 복수건 조회 API", description: "댓글 복수건을 조회한다." })
+  getComments() {
+    return this.commentService.getComments();
   }
 
   @Post()
