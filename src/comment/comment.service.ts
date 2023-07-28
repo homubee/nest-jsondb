@@ -28,12 +28,15 @@ export class CommentService {
     const posts: Post[] = await this.jsonDBService.getTable("post");
 
     let result: Comment[] = comments;
-    for (let elem of result) {
-      elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
-      elem.post = await this.jsonDBService.findRelatedObject(posts, "id", elem.post_id);
-      elem.child_comments = await this.findChildComments(elem.id);
-      elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", OrderType.DESC);
-    }
+    result = await Promise.all(
+      result.map(async (elem) => {
+        elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
+        elem.post = await this.jsonDBService.findRelatedObject(posts, "id", elem.post_id);
+        elem.child_comments = await this.findChildComments(elem.id);
+        elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", OrderType.DESC);
+        return elem;
+      })
+    );
     result = await this.jsonDBService.sortItem(result, "createdAt", OrderType.DESC);
     return result;
   }
@@ -43,11 +46,14 @@ export class CommentService {
     const members: Member[] = await this.jsonDBService.getTable("member");
 
     let result: Comment[] = await this.jsonDBService.findRelatedObjects(comments, "parent_comment_id", id);
-    for (let elem of result) {
-      elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
-      elem.child_comments = await this.findChildComments(elem.id);
-      elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", OrderType.DESC);
-    }
+    result = await Promise.all(
+      result.map(async (elem) => {
+        elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
+        elem.child_comments = await this.findChildComments(elem.id);
+        elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", OrderType.DESC);
+        return elem;
+      })
+    );
     return result;
   }
 
