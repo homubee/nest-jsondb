@@ -5,11 +5,12 @@ import { PostCreateRequestDTO, PostRequestQueryDTO, PostUpdateRequestDTO } from 
 import { PostSearch } from "./post.entity";
 import { Pageable } from "src/util/page";
 import { OrderType } from "src/util/order";
+import { CommentService } from "src/comment/comment.service";
 
 @Controller("api/v1/posts")
 @ApiTags("게시글 API")
 export class PostController {
-  constructor(private postService: PostService) {}
+  constructor(private postService: PostService, private commentService: CommentService) {}
 
   @Get(":id")
   @ApiOperation({ summary: "게시글 단건 조회 API", description: "게시글 단건을 조회한다." })
@@ -49,6 +50,12 @@ export class PostController {
   })
   getPosts(@Query() requestDTO: PostRequestQueryDTO) {
     return this.postService.getPosts(requestDTO);
+  }
+
+  @Get(":postId/comments")
+  @ApiOperation({ summary: "게시글 댓글 조회 API", description: "게시글의 댓글을 조회한다." })
+  getPostComments(@Param("postId") postId: number) {
+    return this.commentService.getCommentsByPostId(postId);
   }
 
   @Post()

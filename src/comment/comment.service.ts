@@ -22,6 +22,26 @@ export class CommentService {
     return result;
   }
 
+  async getCommentsByPostId(postId: number): Promise<Comment[]> {
+    const comments: Comment[] = await this.jsonDBService.getTable("comment");
+    const members: Member[] = await this.jsonDBService.getTable("member");
+    const posts: Post[] = await this.jsonDBService.getTable("post");
+
+    let result: Comment[] = comments;
+    result = await this.jsonDBService.findByField(result, "post_id", postId);
+    result = await Promise.all(
+      result.map(async (elem) => {
+        elem.member = await this.jsonDBService.findRelatedObject(members, "id", elem.member_id);
+        elem.post = await this.jsonDBService.findRelatedObject(posts, "id", elem.post_id);
+        elem.child_comments = await this.findChildComments(elem.id);
+        elem.child_comments = await this.jsonDBService.sortItem(elem.child_comments, "createdAt", OrderType.DESC);
+        return elem;
+      })
+    );
+    result = await this.jsonDBService.sortItem(result, "createdAt", OrderType.DESC);
+    return result;
+  }
+
   async getComments(): Promise<Comment[]> {
     const comments: Comment[] = await this.jsonDBService.getTable("comment");
     const members: Member[] = await this.jsonDBService.getTable("member");
