@@ -17,7 +17,7 @@ export class JsonDBService {
 
   async findById<T extends dbBaseField>(table: T[], id: number): Promise<T> {
     let ret: T;
-    for (var elem of table) {
+    for (let elem of table) {
       if (elem.id === id) {
         ret = elem;
         break;
@@ -38,7 +38,7 @@ export class JsonDBService {
 
   async findRelatedObject<T extends dbBaseField>(table: T[], fkFieldName: string, id: number): Promise<T> {
     let ret: T;
-    for (var elem of table) {
+    for (let elem of table) {
       if (elem[fkFieldName] === id) {
         ret = elem;
         break;

@@ -47,7 +47,7 @@ export class MemberService {
 
     let result: Member = await this.jsonDBService.findById(members, id);
     result.posts = await this.jsonDBService.findRelatedObjects(posts, "member_id", result.id);
-    for (var elem of result.posts) {
+    for (let elem of result.posts) {
       await this.postService.deletePost(elem.id);
     }
     this.jsonDBService.deleteItem("member", members, id);
