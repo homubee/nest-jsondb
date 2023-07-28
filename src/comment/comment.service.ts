@@ -79,9 +79,9 @@ export class CommentService {
 
   async createComment(requestDTO: CommentCreateRequestDTO) {
     const comments: Comment[] = await this.jsonDBService.getTable("comment");
-    // 부모 댓글이 없는 경우에는 parent_comment_id를 0으로 지정
+    // 부모 댓글이 없는 경우에는 parent_comment_id를 null로 지정
     if (!requestDTO.parent_comment_id) {
-      requestDTO.parent_comment_id = 0;
+      requestDTO.parent_comment_id = null;
     }
     this.jsonDBService.createItem("comment", comments, requestDTO);
   }
