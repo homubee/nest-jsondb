@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { JsonDBService } from 'src/util/jsondb.service';
-import { Comment } from './comment.entity';
-import { CommentCreateRequestDTO, CommentUpdateRequestDTO } from './dto/request/comment.request.dto';
-import { Member } from 'src/member/member.entity';
-import { Post } from 'src/post/post.entity';
-import { OrderType } from 'src/util/order';
+import { Injectable } from "@nestjs/common";
+import { JsonDBService } from "src/util/jsondb.service";
+import { Comment } from "./comment.entity";
+import { CommentCreateRequestDTO, CommentUpdateRequestDTO } from "./dto/request/comment.request.dto";
+import { Member } from "src/member/member.entity";
+import { Post } from "src/post/post.entity";
+import { OrderType } from "src/util/order";
 
 @Injectable()
 export class CommentService {
@@ -14,7 +14,7 @@ export class CommentService {
     const comments: Comment[] = await this.jsonDBService.getTable("comment");
     const members: Member[] = await this.jsonDBService.getTable("member");
     const posts: Post[] = await this.jsonDBService.getTable("post");
-    
+
     let result: Comment = await this.jsonDBService.findById(comments, id);
     result.member = await this.jsonDBService.findRelatedObject(members, "id", result.member_id);
     result.post = await this.jsonDBService.findRelatedObject(posts, "id", result.post_id);
@@ -55,7 +55,7 @@ export class CommentService {
     const comments: Comment[] = await this.jsonDBService.getTable("comment");
     // 부모 댓글이 없는 경우에는 parent_comment_id를 0으로 지정
     if (!requestDTO.parent_comment_id) {
-      requestDTO.parent_comment_id = 0
+      requestDTO.parent_comment_id = 0;
     }
     this.jsonDBService.createItem("comment", comments, requestDTO);
   }
@@ -67,7 +67,11 @@ export class CommentService {
 
   async deleteComment(id: number) {
     let changedComments: Comment[] = await this.jsonDBService.getTable("comment");
-    let childComments: Comment[] = await this.jsonDBService.findRelatedObjects(changedComments, "parent_comment_id", id);
+    let childComments: Comment[] = await this.jsonDBService.findRelatedObjects(
+      changedComments,
+      "parent_comment_id",
+      id
+    );
     for (let elem of childComments) {
       await this.deleteComment(elem.id);
       changedComments = await this.jsonDBService.getTable("comment");

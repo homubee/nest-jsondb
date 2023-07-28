@@ -4,17 +4,19 @@ import { Comment } from "src/comment/comment.entity";
 import { Member } from "src/member/member.entity";
 
 export class Post {
-  id: number
-  member_id: number
-  member?: Member
-  board_id: number
-  board?: Board
-  comments?: Comment[]
+  id: number;
+  member_id: number;
+  member?: Member;
+  board_id: number;
+  board?: Board;
+  comments?: Comment[];
   @ApiProperty()
-  title: String
+  title: String;
   @ApiProperty()
-  content: String
-  createdAt: Date
+  content: String;
+  createdAt: Date;
 }
 
-export class PostSearch extends PartialType(OmitType(Post, ["id", "member_id", "member", "board_id", "board", "comments"])) {}
+export class PostSearch extends PartialType(
+  OmitType(Post, ["id", "member_id", "member", "board_id", "board", "comments"])
+) {}

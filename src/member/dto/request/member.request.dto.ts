@@ -1,23 +1,23 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { MemberSearch } from "src/member/member.entity"
-import { Pageable } from "src/util/page"
-import { OrderType } from "src/util/order"
+import { ApiProperty } from "@nestjs/swagger";
+import { MemberSearch } from "src/member/member.entity";
+import { Pageable } from "src/util/page";
+import { OrderType } from "src/util/order";
 
 export class MemberRegisterRequestDTO {
   @ApiProperty()
-  email: String
+  email: String;
 
   @ApiProperty()
-  password: String
+  password: String;
 }
 
 export class MemberRequestQueryDTO {
   @ApiProperty()
-  search?: MemberSearch
+  search?: MemberSearch;
 
   @ApiProperty()
-  orderby?: OrderType
+  orderby?: OrderType;
 
   @ApiProperty()
-  pageable: Pageable
+  pageable: Pageable;
 }

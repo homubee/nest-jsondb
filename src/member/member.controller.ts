@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { MemberService } from './member.service';
-import { ApiExtraModels, ApiOperation, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
-import { MemberRequestQueryDTO, MemberRegisterRequestDTO } from './dto/request/member.request.dto';
-import { MemberSearch } from './member.entity';
-import { Pageable } from 'src/util/page';
-import { OrderType } from 'src/util/order';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { MemberService } from "./member.service";
+import { ApiExtraModels, ApiOperation, ApiQuery, ApiTags, getSchemaPath } from "@nestjs/swagger";
+import { MemberRequestQueryDTO, MemberRegisterRequestDTO } from "./dto/request/member.request.dto";
+import { MemberSearch } from "./member.entity";
+import { Pageable } from "src/util/page";
+import { OrderType } from "src/util/order";
 
 @Controller("api/v1/members")
 @ApiTags("회원 API")
@@ -18,7 +18,10 @@ export class MemberController {
   }
 
   @Get()
-  @ApiOperation({ summary: "회원 복수건 조회 API (페이지네이션)", description: "회원 복수건을 조회한다.\n\n page는 1부터 시작" })
+  @ApiOperation({
+    summary: "회원 복수건 조회 API (페이지네이션)",
+    description: "회원 복수건을 조회한다.\n\n page는 1부터 시작",
+  })
   @ApiExtraModels(MemberSearch, Pageable)
   @ApiQuery({
     name: "search",
@@ -26,8 +29,8 @@ export class MemberController {
     style: "deepObject",
     type: "object",
     schema: {
-      $ref: getSchemaPath(MemberSearch)
-    }
+      $ref: getSchemaPath(MemberSearch),
+    },
   })
   @ApiQuery({
     name: "pageable",
@@ -35,14 +38,14 @@ export class MemberController {
     style: "deepObject",
     type: "object",
     schema: {
-      $ref: getSchemaPath(Pageable)
-    }
+      $ref: getSchemaPath(Pageable),
+    },
   })
   @ApiQuery({
     name: "orderby",
     required: false,
     description: "orderby",
-    enum: OrderType
+    enum: OrderType,
   })
   getMembers(@Query() queryDTO: MemberRequestQueryDTO) {
     return this.memberService.getMembers(queryDTO);

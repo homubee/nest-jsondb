@@ -5,27 +5,27 @@ import { OrderType } from "src/util/order";
 
 export class PostCreateRequestDTO {
   @ApiProperty()
-  member_id: number
+  member_id: number;
 
   @ApiProperty()
-  board_id: number
+  board_id: number;
 
   @ApiProperty()
-  title: String
+  title: String;
 
   @ApiProperty()
-  content: String
+  content: String;
 }
 
-export class PostUpdateRequestDTO extends PartialType(OmitType(PostCreateRequestDTO, ['board_id', 'member_id'])) {}
+export class PostUpdateRequestDTO extends PartialType(OmitType(PostCreateRequestDTO, ["board_id", "member_id"])) {}
 
 export class PostRequestQueryDTO {
   @ApiProperty()
-  search?: PostSearch
+  search?: PostSearch;
 
   @ApiProperty()
-  orderby?: OrderType
+  orderby?: OrderType;
 
   @ApiProperty()
-  pageable: Pageable
+  pageable: Pageable;
 }

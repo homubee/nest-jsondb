@@ -1,17 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { JsonDBService } from 'src/util/jsondb.service';
-import { Board } from './board.entity';
-import { BoardRequestDTO } from './dto/request/board.request.dto';
-import { OrderType } from 'src/util/order';
-import { PostService } from 'src/post/post.service';
-import { Post } from 'src/post/post.entity';
+import { Injectable } from "@nestjs/common";
+import { JsonDBService } from "src/util/jsondb.service";
+import { Board } from "./board.entity";
+import { BoardRequestDTO } from "./dto/request/board.request.dto";
+import { OrderType } from "src/util/order";
+import { PostService } from "src/post/post.service";
+import { Post } from "src/post/post.entity";
 
 @Injectable()
 export class BoardService {
-  constructor(
-    private jsonDBService: JsonDBService,
-    private postService: PostService
-  ) {}
+  constructor(private jsonDBService: JsonDBService, private postService: PostService) {}
 
   async getBoard(id: number): Promise<Board> {
     const boards: Board[] = await this.jsonDBService.getTable("board");

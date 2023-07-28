@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { BoardService } from './board.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { BoardRequestDTO } from './dto/request/board.request.dto';
+import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { BoardService } from "./board.service";
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import { BoardRequestDTO } from "./dto/request/board.request.dto";
 
 @Controller("api/v1/boards")
 @ApiTags("게시판 API")

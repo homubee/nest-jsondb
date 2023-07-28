@@ -1,29 +1,29 @@
-import { ApiProperty } from "@nestjs/swagger"
-import { Type } from "class-transformer"
-import { IsNumber } from "class-validator"
+import { ApiProperty } from "@nestjs/swagger";
+import { Type } from "class-transformer";
+import { IsNumber } from "class-validator";
 
 export class Page<T> {
   @ApiProperty()
-  totalCnt: number
+  totalCnt: number;
 
   @ApiProperty()
-  totalPages: number
+  totalPages: number;
 
   @ApiProperty()
-  pageSize: number
+  pageSize: number;
 
   @ApiProperty()
-  content: T[]
+  content: T[];
 }
 
 export class Pageable {
   @ApiProperty()
   @IsNumber()
   @Type(() => Number)
-  page: number
+  page: number;
 
   @ApiProperty()
   @IsNumber()
   @Type(() => Number)
-  size: number
+  size: number;
 }

@@ -1,17 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { Member } from './member.entity';
-import { JsonDBService } from 'src/util/jsondb.service';
-import { MemberRequestQueryDTO, MemberRegisterRequestDTO } from './dto/request/member.request.dto';
-import { Page } from 'src/util/page';
-import { PostService } from 'src/post/post.service';
-import { Post } from 'src/post/post.entity';
+import { Injectable } from "@nestjs/common";
+import { Member } from "./member.entity";
+import { JsonDBService } from "src/util/jsondb.service";
+import { MemberRequestQueryDTO, MemberRegisterRequestDTO } from "./dto/request/member.request.dto";
+import { Page } from "src/util/page";
+import { PostService } from "src/post/post.service";
+import { Post } from "src/post/post.entity";
 
 @Injectable()
 export class MemberService {
-  constructor(
-    private jsonDBService: JsonDBService,
-    private postService: PostService
-  ) {}
+  constructor(private jsonDBService: JsonDBService, private postService: PostService) {}
 
   async getMember(id: number): Promise<Member> {
     const members: Member[] = await this.jsonDBService.getTable("member");

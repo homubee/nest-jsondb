@@ -1,7 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { CommentService } from './comment.service';
-import { CommentCreateRequestDTO, CommentUpdateRequestDTO } from './dto/request/comment.request.dto';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { ApiOperation, ApiQuery, ApiTags } from "@nestjs/swagger";
+import { CommentService } from "./comment.service";
+import { CommentCreateRequestDTO, CommentUpdateRequestDTO } from "./dto/request/comment.request.dto";
 
 @Controller("api/v1/comments")
 @ApiTags("댓글 API")

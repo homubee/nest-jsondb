@@ -2,16 +2,18 @@ import { ApiProperty, OmitType, PartialType } from "@nestjs/swagger";
 
 export class CommentCreateRequestDTO {
   @ApiProperty()
-  member_id: number
+  member_id: number;
 
   @ApiProperty()
-  post_id: number
+  post_id: number;
 
   @ApiProperty()
-  parent_comment_id: number
+  parent_comment_id: number;
 
   @ApiProperty()
-  content: String
+  content: String;
 }
 
-export class CommentUpdateRequestDTO extends PartialType(OmitType(CommentCreateRequestDTO, ["member_id", "post_id", "parent_comment_id"])) {}
+export class CommentUpdateRequestDTO extends PartialType(
+  OmitType(CommentCreateRequestDTO, ["member_id", "post_id", "parent_comment_id"])
+) {}

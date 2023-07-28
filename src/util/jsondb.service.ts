@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import * as fs from 'fs/promises';
-import { Page, Pageable } from './page';
-import { OrderType } from './order';
+import { Injectable } from "@nestjs/common";
+import * as fs from "fs/promises";
+import { Page, Pageable } from "./page";
+import { OrderType } from "./order";
 
 interface dbBaseField {
   id: number;
@@ -71,9 +71,9 @@ export class JsonDBService {
     let ret: Page<T> = {
       totalCnt: table.length,
       pageSize: pageable.size,
-      totalPages: pageable.size > 0 ? Math.ceil(table.length/pageable.size) : 0,
-      content: table.slice((pageable.page-1)*pageable.size, pageable.page*pageable.size)
-    }
+      totalPages: pageable.size > 0 ? Math.ceil(table.length / pageable.size) : 0,
+      content: table.slice((pageable.page - 1) * pageable.size, pageable.page * pageable.size),
+    };
     return ret;
   }
 
@@ -99,18 +99,18 @@ export class JsonDBService {
   async createItem<T extends dbBaseField>(tableName: string, table: T[], data: any) {
     let id: number;
     if (table.length > 0) {
-      id = table.at(-1).id+1;
+      id = table.at(-1).id + 1;
     } else {
       id = 1;
     }
     table.push({
       id: id,
       ...data,
-      createdAt: new Date()
+      createdAt: new Date(),
     });
     const newData = {
-      data: table
-    }
+      data: table,
+    };
     await fs.writeFile(`./db/${tableName}.json`, JSON.stringify(newData));
   }
 
@@ -119,14 +119,14 @@ export class JsonDBService {
       if (elem.id === id) {
         table[index] = {
           ...elem,
-          ...data
+          ...data,
         };
         break;
       }
     }
     const newData = {
-      data: table
-    }
+      data: table,
+    };
     await fs.writeFile(`./db/${tableName}.json`, JSON.stringify(newData));
   }
 
@@ -138,8 +138,8 @@ export class JsonDBService {
       }
     }
     const newData = {
-      data: table
-    }
+      data: table,
+    };
     await fs.writeFile(`./db/${tableName}.json`, JSON.stringify(newData));
   }
 }

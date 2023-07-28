@@ -1,10 +1,10 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { PostService } from './post.service';
-import { ApiExtraModels, ApiOperation, ApiQuery, ApiTags, getSchemaPath } from '@nestjs/swagger';
-import { PostCreateRequestDTO, PostRequestQueryDTO, PostUpdateRequestDTO } from './dto/request/post.request.dto';
-import { PostSearch } from './post.entity';
-import { Pageable } from 'src/util/page';
-import { OrderType } from 'src/util/order';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { PostService } from "./post.service";
+import { ApiExtraModels, ApiOperation, ApiQuery, ApiTags, getSchemaPath } from "@nestjs/swagger";
+import { PostCreateRequestDTO, PostRequestQueryDTO, PostUpdateRequestDTO } from "./dto/request/post.request.dto";
+import { PostSearch } from "./post.entity";
+import { Pageable } from "src/util/page";
+import { OrderType } from "src/util/order";
 
 @Controller("api/v1/posts")
 @ApiTags("게시글 API")
@@ -18,7 +18,10 @@ export class PostController {
   }
 
   @Get()
-  @ApiOperation({ summary: "게시글 복수건 조회 API (페이지네이션)", description: "게시글 복수건을 조회한다.\n\n page는 1부터 시작" })
+  @ApiOperation({
+    summary: "게시글 복수건 조회 API (페이지네이션)",
+    description: "게시글 복수건을 조회한다.\n\n page는 1부터 시작",
+  })
   @ApiExtraModels(PostSearch, Pageable)
   @ApiQuery({
     name: "search",
@@ -26,8 +29,8 @@ export class PostController {
     style: "deepObject",
     type: "object",
     schema: {
-      $ref: getSchemaPath(PostSearch)
-    }
+      $ref: getSchemaPath(PostSearch),
+    },
   })
   @ApiQuery({
     name: "pageable",
@@ -35,14 +38,14 @@ export class PostController {
     style: "deepObject",
     type: "object",
     schema: {
-      $ref: getSchemaPath(Pageable)
-    }
+      $ref: getSchemaPath(Pageable),
+    },
   })
   @ApiQuery({
     name: "orderby",
     required: false,
     description: "orderby",
-    enum: OrderType
+    enum: OrderType,
   })
   getPosts(@Query() requestDTO: PostRequestQueryDTO) {
     return this.postService.getPosts(requestDTO);
