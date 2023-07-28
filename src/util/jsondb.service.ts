@@ -27,22 +27,12 @@ export class JsonDBService {
   }
 
   async findByField<T extends dbBaseField>(table: T[], fieldName: string, field: any): Promise<T[]> {
-    let ret: T[] = [];
-    for (var elem of table) {
-      if (elem[fieldName] === field) {
-        ret.push(elem);
-      }
-    }
+    let ret: T[] = table.filter((elem) => elem[fieldName] === field);
     return ret;
   }
 
   async findByStringField<T extends dbBaseField>(table: T[], fieldName: string, field: any): Promise<T[]> {
-    let ret: T[] = [];
-    for (var elem of table) {
-      if (elem[fieldName].includes(field)) {
-        ret.push(elem);
-      }
-    }
+    let ret: T[] = table.filter((elem) => elem[fieldName].includes(field));
     return ret;
   }
 
@@ -57,13 +47,8 @@ export class JsonDBService {
     return ret;
   }
 
-  async findRelatedObjects<T extends dbBaseField>(table: T[], fkFieldName: string, id: number): Promise<T[]> {
-    let ret: T[] = [];
-    for (var elem of table) {
-      if (elem[fkFieldName] === id) {
-        ret.push(elem);
-      }
-    }
+  async findRelatedObjects<T extends dbBaseField>(table: T[], keyFieldName: string, id: number): Promise<T[]> {
+    let ret: T[] = table.filter((elem) => elem[keyFieldName] === id);
     return ret;
   }
 
